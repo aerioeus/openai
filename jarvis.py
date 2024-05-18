@@ -2,7 +2,7 @@
 
 import pyttsx3 #pip install pyttsx3
 import speech_recognition as sr #pip install speechRecognition
-import datetime 
+import datetime
 import os
 import wikipedia
 import pywhatkit
@@ -12,8 +12,12 @@ import pyautogui
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 
-engine.setProperty('voice', voices[1].id)
-    
+# Iterate through voices to find a male voice
+for voice in voices:
+    if "male" in voice.name.lower():
+        engine.setProperty('voice', voice.id)
+        break
+
 def speak(audio):
     engine.say(audio)
     engine.runAndWait()
@@ -25,15 +29,15 @@ def wishMe():
         speak("Good Morning!")
 
     elif hour>=12 and hour<18:
-        speak("Good Afternoon!")   
+        speak("Good Afternoon!")
 
     else:
-        speak("Good Evening!")  
+        speak("Good Evening!")
 
-    speak("Please tell me. what can I do??")       
+    speak("Please tell me. what can I do??")
 
 def takeCommand():
-   
+
     r = sr.Recognizer()
     with sr.Microphone() as source:
         print("listening...")
@@ -48,42 +52,42 @@ def takeCommand():
             speak("please , tell me again")
             query = "none"
         return query
-        
-    
+
+
 if __name__ == '__main__':
-    
+
 
   while True:
     query = takeCommand().lower()
-    if 'wake up' in query: 
+    if 'wake up' in query:
         wishMe()
         while True:
             query = takeCommand().lower()
 
-            # time teller 
+            # time teller
 
             if 'time' in query:
                 strTime = datetime.datetime.now().strftime("%H:%M:%S")
                 speak(f"sir , The time is {strTime}")
         # browsers call back condations command
-            
+
             elif 'microsoft edge' in query:
                 speak("open MicroSoft edge")
                 os.startfile("C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe")
-            
+
             elif 'Brave' in query and 'search on brave' in query :
                 speak("opening brave...")
                 os.startfile("C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe")
-            
+
         # search on browser
-            
+
             elif "open" in query or "search" in query:
                 query = query.replace("open" , "")
                 pywhatkit.search(query)
                 # pywhatkit.open(query)
                 speak("done sir!!")
-                    
-            
+
+
             elif 'wikipedia' in query:
                 speak("opening sir..")
                 try:
@@ -95,13 +99,13 @@ if __name__ == '__main__':
                 except:
                     speak("no result found")
                     print("no result found")
-                    
+
             elif 'play' in query :
                     query = query.replace("play" , "")
                     speak('playing' + query)
                     pywhatkit.playonyt(query)
 
-                
+
             elif 'type' in query :
                 speak("what should i write??")
                 while True:
@@ -110,7 +114,7 @@ if __name__ == '__main__':
                         speak("done sir")
                         break
                     else:
-                        pyautogui.write(writeInNotepad) 
+                        pyautogui.write(writeInNotepad)
                 #    attach notepad using osstartfile command using in edge also;
             elif 'exit' in query:
                 speak("it's my pleasure to assist you..")
@@ -119,7 +123,7 @@ if __name__ == '__main__':
             elif 'break' in query:
                 speak("Thanks sir!!")
                 break
-            
+
             # some intraction commands
             elif 'how are you' in query :
                 speak("i'm fine thanks for asking.." )
@@ -132,9 +136,9 @@ if __name__ == '__main__':
                 speak("how can i help you ??")
             elif 'its incorrect' in query or "it's incorrect" in query or 'glat hai' in query or 'its wrong' in query:
                 speak("sorry sir.." )
-                
+
             elif 'thanks' in query or 'cool' in query or 'thats nice' in query or "good job" in query :
                 speak("its my pleasure" )
     else:
-        print ("im sleepping")   
-    
+        print ("im sleepping")
+
